@@ -1,1 +1,2 @@
-# src/__init__.py
+# Source package
+default_app_config = 'src.apps.SrcConfig'

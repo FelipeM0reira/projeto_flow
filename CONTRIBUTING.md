@@ -1,287 +1,218 @@
 # Guia de Contribuição
 
-Obrigado por considerar contribuir para o ProjetoFlow! 🎉
+Obrigado por considerar contribuir com o Theme Switcher Application! Este documento fornece diretrizes para contribuir com o projeto.
+
+## Código de Conduta
+
+Este projeto e todos os participantes são regidos por nosso Código de Conduta. Ao participar, espera-se que você mantenha este código. Por favor, relate comportamentos inaceitáveis.
 
 ## Como Contribuir
 
-### 1. Configurando o Ambiente de Desenvolvimento
+### Reportando Bugs
 
-```bash
-# Clone o repositório
-git clone https://github.com/seu-usuario/ProjetoFlow.git
-cd ProjetoFlow
+Antes de criar um relatório de bug, verifique se já não existe uma issue semelhante. Ao criar um bug report, inclua:
 
-# Crie uma branch para sua feature
-git checkout -b feature/sua-feature-name
+- **Título claro e descritivo**
+- **Passos para reproduzir** o problema
+- **Comportamento esperado** e **comportamento observado**
+- **Screenshots** se aplicável
+- **Ambiente**: SO, versão do Docker, navegador, etc.
+
+### Sugerindo Melhorias
+
+Para sugerir melhorias:
+
+1. Verifique se já não existe uma sugestão similar
+2. Crie uma issue descrevendo:
+   - A melhoria proposta
+   - Por que ela seria útil
+   - Como deveria funcionar
+
+### Pull Requests
+
+1. **Fork** o repositório
+2. **Clone** seu fork localmente
+3. **Crie uma branch** para sua feature:
+   ```bash
+   git checkout -b feature/MinhaNovaFeature
+   ```
+4. **Faça suas alterações** seguindo os padrões do projeto
+5. **Execute os testes**:
+   ```bash
+   # Backend
+   docker-compose exec backend pytest
+   
+   # Frontend
+   docker-compose exec frontend npm test -- --watchAll=false
+   ```
+6. **Commit** suas mudanças:
+   ```bash
+   git commit -m 'Add: descrição da feature'
+   ```
+7. **Push** para sua branch:
+   ```bash
+   git push origin feature/MinhaNovaFeature
+   ```
+8. **Abra um Pull Request**
+
+## Padrões de Desenvolvimento
+
+### Commits
+
+Use o padrão [Conventional Commits](https://www.conventionalcommits.org/):
+
+- `feat:` Nova funcionalidade
+- `fix:` Correção de bug
+- `docs:` Mudanças na documentação
+- `style:` Formatação, ponto e vírgula faltando, etc.
+- `refactor:` Refatoração de código
+- `test:` Adição ou correção de testes
+- `chore:` Manutenção, atualização de dependências
+
+Exemplos:
+```
+feat: adicionar autenticação JWT
+fix: corrigir erro ao deletar usuário
+docs: atualizar README com instruções de deploy
+test: adicionar testes para UserController
 ```
 
-### 2. Desenvolvendo
+### Código Python (Backend)
 
-#### Backend (Django)
-
-```bash
-cd backend
-
-# Crie ambiente virtual
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
-
-# Instale dependências
-pip install -r requirements.txt
-
-# Configure arquivo .env
-cp .env.example .env
-
-# Execute migrações
-python manage.py migrate
-
-# Inicie servidor
-python manage.py runserver
-
-# Execute testes
-pytest
-
-# Format código com Black
-black src tests
-
-# Lint com flake8
-flake8 src tests
-
-# Type checking com mypy
-mypy src
-```
-
-#### Frontend (React)
-
-```bash
-cd frontend
-
-# Instale dependências
-npm install
-
-# Inicie servidor de desenvolvimento
-npm run dev
-
-# Execute testes
-npm run test
-
-# Verifique linting
-npm run lint
-
-# Build para produção
-npm run build
-```
-
-### 3. Commit dos Mudanças
-
-Use mensagens de commit claras e descritivas:
-
-```bash
-# Exemplos:
-git commit -m "feat: adicionar tema escuro"
-git commit -m "fix: corrigir bug de autenticação"
-git commit -m "docs: atualizar README"
-git commit -m "test: adicionar testes para Projects"
-```
-
-#### Formato de Mensagem
-
-```
-<tipo>(<escopo>): <assunto>
-
-<corpo>
-
-<rodapé>
-```
-
-**Tipos válidos:**
-
-- `feat:` - Nova feature
-- `fix:` - Corrige um bug
-- `docs:` - Documentação
-- `style:` - Formatação, sem mudança de lógica
-- `refactor:` - Refatoração de código
-- `perf:` - Melhorias de performance
-- `test:` - Adiciona ou modifica testes
-- `chore:` - Tarefas auxiliares, dependências
-
-**Exemplos:**
-
-```
-feat(auth): implementar autenticação JWT
-
-Implementa sistema de autenticação usando JWT tokens com melhor segurança.
-
-Closes #123
-```
-
-### 4. Código de Conduta
-
-- Sempre seja respeitoso
-- Evite linguagem discriminatória
-- Dê crédito ao trabalho dos outros
-- Foque em discussões técnicas, não pessoais
-
-### 5. Testes
-
-**Obrigatório:** Toda feature deve incluir testes
-
-```bash
-# Backend
-cd backend
-pytest tests/test_new_feature.py
-
-# Frontend
-cd frontend
-npm run test -- path/to/test
-```
-
-Mantenha cobertura de testes acima de 80%:
-
-```bash
-# Backend com cobertura
-pytest --cov=src --cov-report=html
-
-# Frontend
-npm run coverage
-```
-
-### 6. Padrões de Código
-
-#### Backend (Python)
-
-- Siga PEP 8
-- Use type hints
-- Docstrings em doctest format
-- Máx 88 caracteres por linha (Black)
+- Siga o [PEP 8](https://pep8.org/)
+- Use type hints quando possível
+- Docstrings para funções e classes
+- Máximo de 100 caracteres por linha
 
 ```python
-def criar_projeto(usuario: User, nome: str) -> Project:
-    """Cria um novo projeto para o usuário.
-
-    Args:
-        usuario: O usuário proprietário do projeto
-        nome: Nome do projeto
-
-    Returns:
-        Instância do projeto criado
-
-    Raises:
-        ValueError: Se nome está vazio
+def create_user(username: str, email: str, theme: str = 'light') -> User:
     """
-    if not nome:
-        raise ValueError("Nome não pode ser vazio")
-
-    return Project.objects.create(user=usuario, name=nome)
+    Create a new user with given parameters.
+    
+    Args:
+        username: Unique username for the user
+        email: User's email address
+        theme: Theme preference ('light' or 'dark')
+        
+    Returns:
+        User: The created user instance
+    """
+    user = User(username=username, email=email, theme_preference=theme)
+    user.save()
+    return user
 ```
 
-#### Frontend (TypeScript/React)
+### Código JavaScript (Frontend)
 
-- Use functional components com hooks
-- Props com types explícitos
-- Arquivo único para componente + tipos
-- Máx 100 caracteres por linha
+- Use ESLint com configuração React
+- Componentes funcionais com Hooks
+- PropTypes ou TypeScript para validação
+- Nomes descritivos para variáveis e funções
 
-```typescript
-interface ProjectProps {
-  id: string;
-  name: string;
-  onDelete: (id: string) => void;
+```javascript
+/**
+ * Component for switching between light and dark themes
+ * @param {Object} props - Component props
+ * @param {string} props.currentTheme - Current theme ('light' or 'dark')
+ * @param {Function} props.onThemeChange - Callback when theme changes
+ */
+const ThemeSwitcher = ({ currentTheme, onThemeChange }) => {
+  // Implementation
+};
+```
+
+### Testes
+
+#### Backend (pytest)
+
+- Siga TDD: escreva testes antes da implementação
+- Um arquivo de teste por módulo: `test_[module].py`
+- Classe de teste por classe testada: `TestUserModel`
+- Método de teste descritivo: `test_create_user_with_valid_data`
+
+```python
+@pytest.mark.django_db
+class TestUserModel:
+    def test_create_user_with_valid_data(self):
+        """Test creating a user with valid data succeeds."""
+        user = User.objects.create(
+            username='testuser',
+            email='test@example.com'
+        )
+        assert user.id is not None
+        assert user.username == 'testuser'
+```
+
+#### Frontend (Jest)
+
+- Testes para cada componente
+- Teste comportamento, não implementação
+- Use Testing Library para queries semânticas
+
+```javascript
+describe('ThemeSwitcher', () => {
+  test('toggles theme when button is clicked', async () => {
+    const onThemeChange = jest.fn();
+    render(<ThemeSwitcher currentTheme="light" onThemeChange={onThemeChange} />);
+    
+    const button = screen.getByRole('button');
+    await userEvent.click(button);
+    
+    expect(onThemeChange).toHaveBeenCalledWith('dark');
+  });
+});
+```
+
+### CSS
+
+- Use nomes de classe descritivos
+- Organize por componente
+- Use variáveis CSS para cores e temas
+- Mobile-first quando possível
+
+```css
+.user-list {
+  /* Layout */
+  display: flex;
+  flex-direction: column;
+  
+  /* Spacing */
+  padding: 1rem;
+  gap: 0.5rem;
+  
+  /* Visual */
+  background-color: var(--bg-color);
+  border-radius: 8px;
 }
-
-export function ProjectCard({ id, name, onDelete }: ProjectProps) {
-  return (
-    <div>
-      <h3>{name}</h3>
-      <button onClick={() => onDelete(id)}>Deletar</button>
-    </div>
-  );
-}
 ```
 
-### 7. Pull Request
+## Estrutura de Branches
 
-1. **Antes de fazer PR:**
-   - Rebase na branch `main` mais recente
-   - Execute testes localmente
-   - Verifique linting
-   - Atualize documentação se necessário
+- `main` - Código de produção estável
+- `develop` - Branch de desenvolvimento
+- `feature/*` - Novas funcionalidades
+- `bugfix/*` - Correções de bugs
+- `hotfix/*` - Correções urgentes
 
-2. **Template do PR:**
+## Processo de Review
 
-```markdown
-## Descrição
+Pull Requests serão revisados considerando:
 
-Descrição breve do que foi feito.
-
-## Tipo de Mudança
-
-- [ ] Bug fix
-- [ ] Nova feature
-- [ ] Breaking change
-- [ ] Documentação
-
-## Como testar?
-
-Passos para testar this PR.
-
-## Checklist
-
-- [ ] Testes adicionados/passando
-- [ ] Documentação atualizada
-- [ ] Sem breaking changes
-- [ ] Código segue padrões do projeto
-```
-
-### 8. Revisão de Código
-
-Ao revisar:
-
-- Seja construtivo e educado
-- Pergunte em vez de ordenar
-- Sugira melhorias
-- Elogie código bom
-
-### 9. Problemas Conhecidos
-
-Se encontrar um bug:
-
-1. Verifique se já foi reportado
-2. Inclua: versão, SO, passos para reproduzir
-3. Adicione logs/screenshots se possível
-
-### 10. Estrutura de Branches
-
-```
-main              - Código em produção
-├── develop       - Desenvolvimento (base para PRs)
-├── feature/*     - Novas features
-├── bugfix/*      - Correções de bugs
-├── docs/*        - Documentação
-└── refactor/*    - Refatorações
-```
-
-## Documentação
-
-- README.md - Overview do projeto
-- docs/ - Documentação detalhada
-- ARCHITECTURE.md - Arquitetura do sistema
-- API.md - Documentação da API
-
-## Recompensas
-
-Contribuidores ativos podem receber:
-
-- Menção no contributors
-- Badge no README
-- Permissões de manutenção
+1. **Funcionalidade**: O código faz o que deveria?
+2. **Testes**: Há testes adequados?
+3. **Documentação**: Está bem documentado?
+4. **Estilo**: Segue os padrões do projeto?
+5. **Performance**: Há impacto na performance?
 
 ## Dúvidas?
 
-- Abra uma issue
-- Verifique discussões existentes
-- Entre em contato: dev@projetoflow.com
+Se você tiver dúvidas sobre como contribuir:
 
----
+1. Verifique a documentação existente
+2. Procure em issues fechadas
+3. Abra uma issue com sua pergunta
+4. Entre em contato com os mantenedores
 
-Obrigado por contribuir! 🙏
+## Reconhecimento
+
+Todos os contribuidores serão reconhecidos no projeto. Obrigado por ajudar a melhorar o Theme Switcher Application!

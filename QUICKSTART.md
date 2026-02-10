@@ -1,251 +1,201 @@
-# ⚡ Quick Start
+# Guia de Início Rápido
 
-Comece com ProjetoFlow em 5 minutos!
+## Configuração Inicial (5 minutos)
 
-## 🚀 Opção 1: Docker (Recomendado)
+### 1. Pré-requisitos
+- Docker Desktop instalado e rodando
+- Git instalado
 
-### Pré-requisitos
-
-- Docker instalado
-- Docker Compose instalado
-
-### Setup
+### 2. Clone e Execute
 
 ```bash
-# 1. Clone o repositório
-git clone https://github.com/seu-usuario/ProjetoFlow.git
-cd ProjetoFlow
+# Clone o repositório
+git clone <repository-url>
+cd my-project
 
-# 2. Crie arquivo .env (opcional - já vem com defaults)
-# cp infra/.env.example infra/.env
-
-# 3. Inicie os containers
-docker-compose -f infra/docker-compose.yml up -d
-
-# 4. Aguarde ~30 segundos para inicialização
-
-# 5. Pronto! Acesse:
-# Frontend: http://localhost:3000
-# API Docs: http://localhost:5000/api/docs
-# Admin: http://localhost:5000/admin
+# Inicie os containers
+cd infra
+docker-compose up --build
 ```
 
-**Credenciais Demo:**
+**Aguarde** a mensagem de que todos os serviços estão rodando (~2-3 minutos na primeira vez).
 
-```
-Usuário: admin
-Senha: password
-```
+### 3. Inicialize o Banco de Dados
 
-### Comandos Úteis
+Em um novo terminal:
 
 ```bash
-# Ver logs
-docker-compose -f infra/docker-compose.yml logs -f
+cd my-project/infra
+docker-compose exec backend python manage.py migrate
+```
 
+### 4. Acesse a Aplicação
+
+- **Frontend**: http://localhost:3000
+- **API**: http://localhost:8000/api/users/
+- **Documentação**: http://localhost:8000/swagger/
+
+## Testando a Aplicação
+
+### Usuários Pré-cadastrados
+
+O banco de dados já vem com 3 usuários de exemplo:
+- `admin` - tema escuro
+- `user1` - tema claro
+- `user2` - tema escuro
+
+### Fluxo de Teste
+
+1. Abra http://localhost:3000
+2. Clique em um usuário na lista à esquerda
+3. Use o botão de alternância de tema no topo
+4. Crie um novo usuário com o formulário
+5. Experimente deletar um usuário
+
+## Executando Testes
+
+### Backend (Python/Django)
+
+```bash
+# Todos os testes
+docker-compose exec backend pytest
+
+# Com cobertura
+docker-compose exec backend pytest --cov=src
+
+# Teste específico
+docker-compose exec backend pytest src/tests/test_models.py::TestUserModel::test_create_user
+```
+
+### Frontend (React/Jest)
+
+```bash
+# Modo interativo
+docker-compose exec frontend npm test
+
+# Todos os testes uma vez
+docker-compose exec frontend npm test -- --watchAll=false
+
+# Com cobertura
+docker-compose exec frontend npm run test:coverage
+```
+
+## Comandos Úteis
+
+### Parar e Limpar
+
+```bash
 # Parar containers
-docker-compose -f infra/docker-compose.yml down
+docker-compose down
 
-# Limpar dados (reset completo)
-docker-compose -f infra/docker-compose.yml down -v
+# Parar e remover volumes (limpa o banco)
+docker-compose down -v
 ```
 
----
-
-## 🖥️ Opção 2: Desenvolvimento Local
-
-### Backend (Django)
+### Ver Logs
 
 ```bash
-cd backend
+# Todos os serviços
+docker-compose logs -f
 
-# 1. Criar ambiente virtual
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
-
-# 2. Instalar dependências
-pip install -r requirements.txt
-
-# 3. Setup do banco de dados (necessário PostgreSQL local)
-# Faça criar um banco com:
-# createdb -U postgres local_db
-
-# 4. Executar migrações
-python manage.py migrate
-
-# 5. Criar super usuário (opcional)
-python manage.py createsuperuser
-
-# 6. Iniciar servidor
-python manage.py runserver
-# Acesse: http://localhost:8000
+# Serviço específico
+docker-compose logs -f backend
+docker-compose logs -f frontend
+docker-compose logs -f db
 ```
 
-### Frontend (React)
+### Acessar Shell dos Containers
 
 ```bash
-cd frontend
+# Backend (Python)
+docker-compose exec backend bash
 
-# 1. Instalar dependências
-npm install
+# Frontend (Node)
+docker-compose exec frontend sh
 
-# 2. Iniciar servidor
-npm run dev
-# Acesse: http://localhost:5173
-
-# 3. Em outro terminal, build em watch mode
-npm run build -- --watch
+# Database (PostgreSQL)
+docker-compose exec db psql -U local_user -d local_db
 ```
 
----
-
-## 📝 Tarefas Comuns
-
-### Criar novo projeto
+### Django Admin
 
 ```bash
-# Via Frontend (UI)
-1. Login
-2. Clique em "New Project"
-3. Preencha dados
-4. Salve
+# Criar superusuário
+docker-compose exec backend python manage.py createsuperuser
 
-# Via API (curl)
-curl -X POST http://localhost:5000/api/v1/projects/ \
-  -H "Authorization: Bearer <seu_token>" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Meu Projeto",
-    "description": "Descrição"
-  }'
+# Acessar admin
+# http://localhost:8000/admin
 ```
 
-### Executar testes
+## Desenvolvimento
+
+### Modificar Código
+
+Os volumes Docker estão configurados para hot-reload:
+
+- **Backend**: Modifique arquivos em `backend/src/` - o Django recarrega automaticamente
+- **Frontend**: Modifique arquivos em `frontend/src/` - o React recarrega automaticamente
+
+### Adicionar Dependências
+
+#### Backend (Python)
 
 ```bash
-# Backend
-cd backend
-pytest
+# Adicione ao requirements.txt
+echo "nova-biblioteca==1.0.0" >> backend/requirements.txt
 
-# Frontend
-cd frontend
-npm run test
+# Reinstale
+docker-compose exec backend pip install -r requirements.txt
+
+# Ou reconstrua
+docker-compose up --build backend
 ```
 
-### Alternar tema
+#### Frontend (Node)
 
-Clique no ícone de lua/sol no canto superior direito da interface.
+```bash
+# Instale no container
+docker-compose exec frontend npm install nova-biblioteca
 
----
+# Ou adicione ao package.json e reconstrua
+docker-compose up --build frontend
+```
 
-## 🔗 Recursos Importantes
-
-- **Documentação**: [README.md](README.md)
-- **Arquitetura**: [ARCHITECTURE.md](ARCHITECTURE.md)
-- **Contribuindo**: [CONTRIBUTING.md](CONTRIBUTING.md)
-- **Deployment**: [DEPLOYMENT.md](DEPLOYMENT.md)
-- **API Docs**: http://localhost:5000/api/docs (quando rodando)
-
----
-
-## 🆘 Problemas Comuns
+## Troubleshooting
 
 ### Porta já em uso
 
 ```bash
-# Mude no .env
-FRONTEND_PORT=3001
-BACKEND_PORT=5001
-POSTGRES_PORT=5433
-
-# Ou libere a porta
-lsof -i :3000  # Linux/Mac
-netstat -ano | findstr :3000  # Windows
+# Modifique as portas em infra/docker-compose.yml
+# Exemplo: mudar de 3000:3000 para 3001:3000
 ```
 
-### PostgreSQL não conecta
+### Erro de conexão com banco
 
 ```bash
-# Verifique se está rodando
-psql --version
+# Verifique se o banco está rodando
+docker-compose ps
 
-# Crie banco de dados padrão
-createdb -U postgres local_db
+# Verifique logs do banco
+docker-compose logs db
 
-# Ou use Docker
-docker run -d \
-  --name projetoflow-db \
-  -e POSTGRES_PASSWORD=local_password \
-  -e POSTGRES_DB=local_db \
-  -p 5432:5432 \
-  postgres:15
+# Recrie o banco
+docker-compose down -v
+docker-compose up -d db
+docker-compose exec backend python manage.py migrate
 ```
 
-### Erro "Module not found"
+### Módulos não encontrados
 
 ```bash
-# Backend
-pip install -r requirements.txt
-
-# Frontend
-npm install
-npm ci  # Força versões exatas
+# Reconstrua os containers
+docker-compose down
+docker-compose up --build
 ```
 
----
+## Próximos Passos
 
-## 📊 Estrutura de Pastas
-
-```
-ProjetoFlow/
-├── frontend/        - React SPA
-├── backend/         - Django API
-├── db/              - Scripts SQL
-├── infra/           - Docker config
-├── README.md        - Documentação principal
-└── Makefile         - Comandos úteis
-```
-
----
-
-## ⚙️ Variáveis de Ambiente
-
-### Principais
-
-```env
-# Backend
-DATABASE_URL=postgresql://user:pwd@localhost:5432/db
-DEBUG=True
-SECRET_KEY=dev-key
-
-# Frontend
-VITE_API_BASE_URL=http://localhost:5000/api
-
-# Database
-POSTGRES_USER=local_user
-POSTGRES_PASSWORD=local_password
-POSTGRES_DB=local_db
-```
-
-Veja [.env.example](.env.example) para todas as opções.
-
----
-
-## 📚 Próximos Passos
-
-1. ✅ Familiarize-se com a arquitetura em [ARCHITECTURE.md](ARCHITECTURE.md)
-2. ✅ Crie seu primeiro projeto
-3. ✅ Leia sobre autenticação em [API.md](docs/API.md) (se existir)
-4. ✅ Contribua! Veja [CONTRIBUTING.md](CONTRIBUTING.md)
-
----
-
-## 💬 Precisa de ajuda?
-
-- Abra uma [issue](https://github.com/seu-usuario/ProjetoFlow/issues)
-- Verifique [FAQs](docs/FAQs.md) (se existir)
-- Email: support@projetoflow.com
-
----
-
-**Pronto para começar?** Escolha Docker ou local e vá! 🚀
+1. Explore a [documentação da API](http://localhost:8000/swagger/)
+2. Leia o [README.md](./README.md) completo
+3. Adicione novas funcionalidades seguindo TDD
+4. Contribua com melhorias!
