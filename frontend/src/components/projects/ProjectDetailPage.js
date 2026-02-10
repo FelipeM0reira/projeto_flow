@@ -397,16 +397,21 @@ export default function ProjectDetailPage() {
                             ? 'Em Progresso'
                             : 'Concluída'}
                       </span>
-                      {task.due_date && (
-                        <span
-                          className={`task-due ${new Date(task.due_date) < new Date() && !task.completed ? 'overdue' : ''}`}
-                        >
-                          <HiOutlineCalendar size={12} />
-                          {format(new Date(task.due_date), 'dd/MM/yyyy', {
-                            locale: ptBR
-                          })}
-                        </span>
-                      )}
+                      {task.due_date && (() => {
+                        // Parse date string 'YYYY-MM-DD' as local date (avoid UTC shift)
+                        const [y, m, d] = task.due_date.split('-')
+                        const localDate = new Date(Number(y), Number(m) - 1, Number(d))
+                        const todayLocal = new Date()
+                        // zero time component for comparison
+                        todayLocal.setHours(0,0,0,0)
+                        const isOverdue = localDate < todayLocal && !task.completed
+                        return (
+                          <span className={`task-due ${isOverdue ? 'overdue' : ''}`}>
+                            <HiOutlineCalendar size={12} />
+                            {format(localDate, 'dd/MM/yyyy', { locale: ptBR })}
+                          </span>
+                        )
+                      })()}
                     </div>
                   </div>
                   <div className="task-actions">
