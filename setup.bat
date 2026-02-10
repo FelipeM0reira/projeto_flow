@@ -26,9 +26,6 @@ if %errorlevel% neq 0 (
 echo OK Docker Compose encontrado
 echo.
 
-REM Navegar para o diretório infra
-cd infra
-
 echo Construindo containers Docker...
 docker-compose build
 

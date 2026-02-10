@@ -1,121 +1,101 @@
-import React, { useState, useEffect } from 'react';
-import './styles/App.css';
-import ThemeSwitcher from './components/ThemeSwitcher';
-import UserList from './components/UserList';
-import UserForm from './components/UserForm';
-import api from './services/api';
+import React from 'react'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { Toaster } from 'react-hot-toast'
+import { AuthProvider, useAuth } from './contexts/AuthContext'
+import { ThemeProvider } from './contexts/ThemeContext'
+import PrivateRoute from './components/common/PrivateRoute'
+import AppLayout from './components/layout/AppLayout'
+import LoginPage from './components/auth/LoginPage'
+import RegisterPage from './components/auth/RegisterPage'
+import DashboardPage from './components/dashboard/DashboardPage'
+import ProjectsPage from './components/projects/ProjectsPage'
+import ProjectDetailPage from './components/projects/ProjectDetailPage'
 
-function App() {
-  const [theme, setTheme] = useState('light');
-  const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+import './styles/global.css'
+import './styles/components.css'
+import './styles/layout.css'
+import './styles/dashboard.css'
+import './styles/pages.css'
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+function PublicRoute({ children }) {
+  const { user, loading } = useAuth()
 
-  useEffect(() => {
-    document.body.className = theme;
-  }, [theme]);
+  if (loading) {
+    return (
+      <div className="loading-page">
+        <div className="spinner spinner-lg" />
+      </div>
+    )
+  }
 
-  const fetchUsers = async () => {
-    try {
-      setLoading(true);
-      const response = await api.getUsers();
-      setUsers(response.data.results || response.data);
-    } catch (error) {
-      console.error('Erro ao buscar usuários:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  if (user) {
+    return <Navigate to="/" replace />
+  }
 
-  const handleThemeChange = async (newTheme) => {
-    setTheme(newTheme);
-    
-    if (selectedUser) {
-      try {
-        await api.updateUserTheme(selectedUser.id, newTheme);
-        fetchUsers();
-      } catch (error) {
-        console.error('Erro ao atualizar tema do usuário:', error);
-      }
-    }
-  };
-
-  const handleUserSelect = (user) => {
-    setSelectedUser(user);
-    setTheme(user.theme_preference);
-  };
-
-  const handleUserCreate = async (userData) => {
-    try {
-      await api.createUser(userData);
-      fetchUsers();
-    } catch (error) {
-      console.error('Erro ao criar usuário:', error);
-      throw error;
-    }
-  };
-
-  const handleUserDelete = async (userId) => {
-    try {
-      await api.deleteUser(userId);
-      if (selectedUser?.id === userId) {
-        setSelectedUser(null);
-        setTheme('light');
-      }
-      fetchUsers();
-    } catch (error) {
-      console.error('Erro ao deletar usuário:', error);
-    }
-  };
-
-  return (
-    <div className={`App ${theme}`}>
-      <header className="App-header">
-        <h1>Theme Switcher Application</h1>
-        <ThemeSwitcher 
-          currentTheme={theme} 
-          onThemeChange={handleThemeChange}
-          disabled={!selectedUser}
-        />
-      </header>
-
-      <main className="App-main">
-        <div className="container">
-          <div className="sidebar">
-            <h2>Usuários</h2>
-            {loading ? (
-              <p>Carregando...</p>
-            ) : (
-              <UserList 
-                users={users}
-                selectedUser={selectedUser}
-                onUserSelect={handleUserSelect}
-                onUserDelete={handleUserDelete}
-              />
-            )}
-          </div>
-
-          <div className="content">
-            <h2>Criar Novo Usuário</h2>
-            <UserForm onSubmit={handleUserCreate} />
-            
-            {selectedUser && (
-              <div className="user-info">
-                <h3>Usuário Selecionado</h3>
-                <p><strong>Nome:</strong> {selectedUser.username}</p>
-                <p><strong>Email:</strong> {selectedUser.email}</p>
-                <p><strong>Tema:</strong> {selectedUser.theme_preference}</p>
-              </div>
-            )}
-          </div>
-        </div>
-      </main>
-    </div>
-  );
+  return children
 }
 
-export default App;
+function AppRoutes() {
+  return (
+    <Routes>
+      {/* Public routes */}
+      <Route
+        path="/login"
+        element={
+          <PublicRoute>
+            <LoginPage />
+          </PublicRoute>
+        }
+      />
+      <Route
+        path="/register"
+        element={
+          <PublicRoute>
+            <RegisterPage />
+          </PublicRoute>
+        }
+      />
+
+      {/* Private routes */}
+      <Route
+        element={
+          <PrivateRoute>
+            <AppLayout />
+          </PrivateRoute>
+        }
+      >
+        <Route path="/" element={<DashboardPage />} />
+        <Route path="/projects" element={<ProjectsPage />} />
+        <Route path="/projects/:id" element={<ProjectDetailPage />} />
+      </Route>
+
+      {/* Fallback */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  )
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <ThemeProvider>
+          <AppRoutes />
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              duration: 3000,
+              style: {
+                borderRadius: '10px',
+                background: 'var(--color-surface)',
+                color: 'var(--color-text-primary)',
+                border: '1px solid var(--color-border)',
+                boxShadow: 'var(--shadow-lg)'
+              }
+            }}
+          />
+        </ThemeProvider>
+      </AuthProvider>
+    </BrowserRouter>
+  )
+}

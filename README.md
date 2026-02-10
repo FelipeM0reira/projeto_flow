@@ -1,369 +1,252 @@
-# ProjetoFlow 🚀
+# 🚀 ProjetoFlow
 
-Uma aplicação web moderna para gerenciamento de tarefas e projetos com suporte a temas claro e escuro.
+**Sistema de Gerenciamento de Projetos e Tarefas** — Full-stack application built with Django REST Framework + React.
 
-## 📋 Características
+![Python](https://img.shields.io/badge/Python-3.12-blue)
+![Django](https://img.shields.io/badge/Django-4.2-green)
+![React](https://img.shields.io/badge/React-18.2-61dafb)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-336791)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED)
 
-- ✅ Autenticação segura com JWT (JSON Web Tokens)
-- 🌓 Temas claro e escuro com preferência persistente
-- 📱 Interface responsiva com React + TypeScript
-- 🔌 API RESTful robusta com Django
-- 💾 Banco de dados PostgreSQL
-- 🐳 Docker e Docker Compose para fácil deployment
-- ✔️ Testes automatizados (Frontend com Vitest, Backend com pytest)
-- 📚 Documentação API com Swagger/OpenAPI
-- 📊 CI/CD pronto para integração
+---
 
-## 🏗️ Arquitetura do Projeto
+## 📋 Funcionalidades
+
+### Autenticação & Usuários
+
+- Registro e login com JWT (access + refresh tokens)
+- Perfil de usuário com troca de tema (claro/escuro)
+- Sessão persistente com refresh automático de tokens
+
+### Projetos
+
+- CRUD completo de projetos
+- Sistema de membros com papéis (admin/membro)
+- Colaboração — adicionar e remover membros
+- Progresso calculado automaticamente
+
+### Tarefas
+
+- CRUD completo de tarefas por projeto
+- Status: A Fazer, Em Progresso, Concluída
+- Prioridade: Baixa, Média, Alta
+- Atribuição a membros do projeto
+- Data de vencimento
+- Toggle de conclusão rápido
+
+### Dashboard
+
+- Estatísticas agregadas (projetos, tarefas, membros)
+- Distribuição de tarefas por status
+- Projetos recentes
+- Barra de progresso global
+
+### Interface
+
+- Design moderno e responsivo
+- Tema claro/escuro com transição suave
+- Sidebar de navegação colapsável
+- Formulários com validação em tempo real
+- Notificações toast
+
+---
+
+## 🏗️ Arquitetura
 
 ```
 projetoflow/
-├── infra/
-│   ├── Dockerfile.frontend
-│   ├── Dockerfile.backend
-│   ├── docker-compose.yml
-│   └── .env
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── hooks/
-│   │   ├── services/
-│   │   ├── styles/
-│   │   ├── App.tsx
-│   │   └── main.tsx
-│   ├── public/
-│   ├── index.html
-│   └── package.json
-├── backend/
-│   ├── src/
-│   │   ├── api/
-│   │   │   ├── models.py
-│   │   │   ├── views.py
-│   │   │   ├── serializers.py
-│   │   │   └── urls.py
-│   │   ├── settings.py
-│   │   ├── urls.py
-│   │   └── wsgi.py
-│   ├── tests/
-│   │   ├── conftest.py
-│   │   ├── test_models.py
-│   │   ├── test_views.py
-│   │   └── test_serializers.py
-│   ├── manage.py
-│   ├── requirements.txt
-│   └── pytest.ini
-├── db/
-│   └── init.sql
-└── README.md
+├── backend/                 # Django REST Framework API
+│   ├── config/              # Settings, URLs, WSGI
+│   └── src/
+│       ├── models/          # User, Project, Task, ProjectMembership
+│       ├── serializers/     # Auth, Project, Task serializers
+│       ├── controllers/     # Auth, Project, Task, Dashboard views
+│       ├── routes/          # URL routing
+│       └── tests/           # 64 tests, 98% coverage
+├── frontend/                # React SPA
+│   └── src/
+│       ├── components/      # Auth, Layout, Dashboard, Projects
+│       ├── contexts/        # AuthContext, ThemeContext
+│       ├── services/        # Axios API client with JWT interceptors
+│       └── styles/          # CSS Design System (variables, components)
+├── db/                      # Database initialization
+├── docker-compose.yml       # Orquestração dos 3 containers
+├── Dockerfile.backend       # Python 3.12 + Django
+└── Dockerfile.frontend      # Node 18 + React
 ```
+
+---
 
 ## 🚀 Quick Start
 
-### Pré-requisitos
-
-- Docker >= 20.10
-- Docker Compose >= 1.29
-- Node.js >= 18 (para desenvolvimento local sem Docker)
-- Python >= 3.11 (para desenvolvimento local sem Docker)
-
-### Usando Docker (Recomendado)
-
-1. **Clone o repositório**
+### Com Docker (recomendado)
 
 ```bash
-git clone https://github.com/seu-usuario/ProjetoFlow.git
-cd ProjetoFlow
+# Clone o repositório
+git clone <repo-url>
+cd projetoflow
+
+# Inicie todos os serviços
+docker-compose up -d
+
+# Acesse:
+# Frontend: http://localhost:3000
+# Backend API: http://localhost:8000
+# Swagger Docs: http://localhost:8000/swagger/
 ```
 
-2. **Configure as variáveis de ambiente**
-
-```bash
-cp infra/.env.example infra/.env
-```
-
-3. **Inicie os containers**
-
-```bash
-docker-compose -f infra/docker-compose.yml up -d
-```
-
-4. **Execute as migrações**
-
-```bash
-docker-compose -f infra/docker-compose.yml exec backend python manage.py migrate
-```
-
-5. **Crie um super usuário (opcional)**
-
-```bash
-docker-compose -f infra/docker-compose.yml exec backend python manage.py createsuperuser
-```
-
-A aplicação estará disponível em:
-
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:5000/api
-- API Docs: http://localhost:5000/api/docs
-- Admin: http://localhost:5000/admin
-
-### Desenvolvimento Local
+### Sem Docker (desenvolvimento local)
 
 #### Backend
 
 ```bash
+# Crie e ative o virtual environment
+python3 -m venv venv
+source venv/bin/activate  # Linux/Mac
+# venv\Scripts\activate   # Windows
+
+# Instale dependências
 cd backend
-
-# Criar ambiente virtual
-python -m venv venv
-source venv/bin/activate  # No Windows: venv\Scripts\activate
-
-# Instalar dependências
 pip install -r requirements.txt
 
-# Configurar variáveis de ambiente
-cp .env.example .env
-
-# Executar migrações
+# Configure o banco (requer PostgreSQL rodando)
+# Edite .env com suas credenciais ou use SQLite para dev
 python manage.py migrate
-
-# Iniciar servidor
 python manage.py runserver
-
-# Executar testes
-pytest
-
-# Executar testes com cobertura
-pytest --cov=src --cov-report=html
 ```
 
 #### Frontend
 
 ```bash
 cd frontend
-
-# Instalar dependências
 npm install
-
-# Iniciar servidor de desenvolvimento
-npm run dev
-
-# Executar testes
-npm run test
-
-# Build para produção
-npm run build
+npm start
 ```
 
-## 🔐 Credenciais Demo
-
-Para testar a aplicação, use as credenciais padrão:
-
-- **Usuário**: admin
-- **Senha**: password
-
-> ⚠️ Altere as credenciais na primeira utilização em produção!
-
-## 📚 Documentação da API
-
-Acesse a documentação interativa em: `http://localhost:5000/api/docs`
-
-### Endpoints Principais
-
-#### Autenticação
-
-- `POST /api/v1/auth/login/` - Login do usuário
-- `POST /api/v1/auth/register/` - Registro de novo usuário
-
-#### Projetos
-
-- `GET /api/v1/projects/` - Listar projetos
-- `POST /api/v1/projects/` - Criar novo projeto
-- `GET /api/v1/projects/{id}/` - Obter detalhes do projeto
-- `PUT /api/v1/projects/{id}/` - Atualizar projeto
-- `DELETE /api/v1/projects/{id}/` - Deletar projeto
-
-#### Tarefas
-
-- `GET /api/v1/tasks/` - Listar tarefas
-- `POST /api/v1/tasks/` - Criar nova tarefa
-- `GET /api/v1/tasks/{id}/` - Obter detalhes da tarefa
-- `PUT /api/v1/tasks/{id}/` - Atualizar tarefa
-- `DELETE /api/v1/tasks/{id}/` - Deletar tarefa
-
-#### Preferências
-
-- `GET /api/v1/users/preferences/` - Obter preferências do usuário
-- `PUT /api/v1/users/preferences/` - Atualizar preferências (tema, idioma)
+---
 
 ## 🧪 Testes
 
-### Frontend
-
-```bash
-cd frontend
-
-# Executar testes
-npm run test
-
-# Modo watch
-npm run test -- --watch
-
-# Com cobertura
-npm run coverage
-```
-
-### Backend
+### Backend (pytest)
 
 ```bash
 cd backend
+source ../venv/bin/activate
 
-# Executar todos os testes
+# Rodar todos os testes
 pytest
 
-# Executar teste específico
-pytest tests/test_models.py
+# Com cobertura detalhada
+pytest --cov=src --cov-report=term-missing
 
-# Com cobertura
-pytest --cov=src --cov-report=html
+# Resultado: 64 tests passing, 98% coverage
 ```
 
-## 🔄 Workflow Git
-
-1. Crie uma nova branch para sua feature
+### Frontend (Jest)
 
 ```bash
-git checkout -b feature/sua-feature
+cd frontend
+npm test -- --watchAll=false
+
+# Resultado: 8 tests passing
 ```
 
-2. Faça commits com mensagens descritivas
+---
 
-```bash
-git commit -m "feat: descrição da feature"
-```
+## 📡 API Endpoints
 
-3. Push para a branch
+### Autenticação
 
-```bash
-git push origin feature/sua-feature
-```
+| Método | Endpoint              | Descrição                   |
+| ------ | --------------------- | --------------------------- |
+| POST   | `/api/auth/register/` | Registrar novo usuário      |
+| POST   | `/api/auth/login/`    | Login (retorna JWT tokens)  |
+| GET    | `/api/auth/me/`       | Dados do usuário logado     |
+| PATCH  | `/api/auth/profile/`  | Atualizar perfil            |
+| PATCH  | `/api/auth/theme/`    | Atualizar tema (light/dark) |
 
-4. Abra um Pull Request
+### Projetos
 
-### Convenções de Commit
+| Método    | Endpoint                            | Descrição                  |
+| --------- | ----------------------------------- | -------------------------- |
+| GET       | `/api/projects/`                    | Listar projetos do usuário |
+| POST      | `/api/projects/`                    | Criar projeto              |
+| GET       | `/api/projects/{id}/`               | Detalhes do projeto        |
+| PUT/PATCH | `/api/projects/{id}/`               | Atualizar projeto          |
+| DELETE    | `/api/projects/{id}/`               | Deletar projeto            |
+| GET       | `/api/projects/{id}/members/`       | Listar membros             |
+| POST      | `/api/projects/{id}/add_member/`    | Adicionar membro           |
+| POST      | `/api/projects/{id}/remove_member/` | Remover membro             |
 
-- `feat:` - Nova feature
-- `fix:` - Correção de bug
-- `docs:` - Documentação
-- `style:` - Formatação, sem mudança lógica
-- `refactor:` - Refatoração de código
-- `test:` - Adição ou modificação de testes
-- `chore:` - Tarefas auxiliares
+### Tarefas
 
-## 📦 Deployment
+| Método    | Endpoint                                              | Descrição                 |
+| --------- | ----------------------------------------------------- | ------------------------- |
+| GET       | `/api/projects/{id}/tasks/`                           | Listar tarefas do projeto |
+| POST      | `/api/projects/{id}/tasks/`                           | Criar tarefa              |
+| GET       | `/api/projects/{id}/tasks/{task_id}/`                 | Detalhes da tarefa        |
+| PUT/PATCH | `/api/projects/{id}/tasks/{task_id}/`                 | Atualizar tarefa          |
+| DELETE    | `/api/projects/{id}/tasks/{task_id}/`                 | Deletar tarefa            |
+| POST      | `/api/projects/{id}/tasks/{task_id}/toggle_complete/` | Toggle concluída          |
 
-### Variáveis de Ambiente
+### Dashboard
 
-Crie um arquivo `.env` na pasta `infra/`:
+| Método | Endpoint          | Descrição              |
+| ------ | ----------------- | ---------------------- |
+| GET    | `/api/dashboard/` | Estatísticas agregadas |
 
-```env
-# Database
-POSTGRES_USER=production_user
-POSTGRES_PASSWORD=strong_password_here
-POSTGRES_DB=projetoflow_db
+### Documentação Interativa
 
-# Backend
-DEBUG=False
-SECRET_KEY=your-secret-key-here
-ALLOWED_HOSTS=yourdomain.com,www.yourdomain.com
+| URL         | Descrição               |
+| ----------- | ----------------------- |
+| `/swagger/` | Swagger UI (interativo) |
+| `/redoc/`   | ReDoc (documentação)    |
 
-# Frontend
-VITE_API_BASE_URL=https://yourdomain.com/api
+---
 
-# CORS
-CORS_ALLOWED_ORIGINS=https://yourdomain.com
-```
+## 🔧 Variáveis de Ambiente
 
-### Deploy com Docker
+| Variável            | Padrão                  | Descrição                          |
+| ------------------- | ----------------------- | ---------------------------------- |
+| `SECRET_KEY`        | `django-insecure-...`   | Chave secreta do Django            |
+| `DEBUG`             | `True`                  | Modo debug                         |
+| `POSTGRES_DB`       | `projetoflow_db`        | Nome do banco                      |
+| `POSTGRES_USER`     | `projetoflow_user`      | Usuário do banco                   |
+| `POSTGRES_PASSWORD` | `projetoflow_pass`      | Senha do banco                     |
+| `POSTGRES_HOST`     | `localhost`             | Host do banco (use `db` no Docker) |
+| `POSTGRES_PORT`     | `5432`                  | Porta do banco                     |
+| `REACT_APP_API_URL` | `http://localhost:8000` | URL da API para o frontend         |
 
-```bash
-# Build das imagens
-docker-compose -f infra/docker-compose.yml build
+---
 
-# Iniciar em produção
-docker-compose -f infra/docker-compose.yml up -d
-```
+## 🛠️ Tecnologias
 
-## 🛠️ Troubleshooting
+### Backend
 
-### Problema: Erro de conexão com banco de dados
+- **Python 3.12** + **Django 4.2** + **Django REST Framework 3.14**
+- **SimpleJWT** — Autenticação JWT (access 2h, refresh 7d)
+- **django-filter** — Filtros avançados nas listagens
+- **drf-yasg** — Documentação Swagger/ReDoc automática
+- **psycopg2** — Driver PostgreSQL
+- **pytest** + **factory-boy** — Testes com fixtures
 
-```bash
-# Verifique se o container PostgreSQL está rodando
-docker-compose -f infra/docker-compose.yml logs db
+### Frontend
 
-# Restart dos containers
-docker-compose -f infra/docker-compose.yml restart
-```
+- **React 18** + **React Router 6**
+- **Axios** — HTTP client com interceptors JWT
+- **react-hot-toast** — Notificações
+- **react-icons** — Biblioteca de ícones
+- **date-fns** — Formatação de datas
+- **CSS Design System** — Variáveis, temas, componentes reutilizáveis
 
-### Problema: Porta já em uso
+### Infraestrutura
 
-```bash
-# Mude as portas no arquivo .env
-# Ou libere as portas:
-lsof -i :3000  # Frontend
-lsof -i :5000  # Backend
-lsof -i :5432  # Database
-```
+- **Docker Compose** — 3 containers (frontend, backend, db)
+- **PostgreSQL 15** — Banco de dados
+- **Node 18 Alpine** — Build do frontend
 
-## 📊 Monitoramento
-
-O projeto inclui health checks para todos os serviços. Verifique:
-
-```bash
-curl http://localhost:5000/api/v1/health/  # Backend
-curl http://localhost:3000/                 # Frontend
-```
-
-## 🤝 Contribuindo
-
-Contribuições são bem-vindas! Por favor, leia [CONTRIBUTING.md](CONTRIBUTING.md) para detalhes.
+---
 
 ## 📄 Licença
 
 Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
-## 👥 Autores
-
-- ProjetoFlow Team
-
-## 📞 Suporte
-
-Para dúvidas ou problemas:
-
-1. Verifique a [documentação](docs/)
-2. Abra uma [issue no GitHub](https://github.com/seu-usuario/ProjetoFlow/issues)
-3. Entre em contato via email
-
-## 🗺️ Roadmap
-
-- [ ] Autenticação OAuth2 (Google, GitHub)
-- [ ] Colaboração em tempo real
-- [ ] Notificações por email
-- [ ] Mobile app (React Native)
-- [ ] Analytics e relatórios
-- [ ] Integração com Slack/Discord
-- [ ] Backup automático
-- [ ] Rate limiting e throttling
-
-## 📚 Seus links de referência
-
-- [React Docs](https://react.dev/)
-- [Django Docs](https://docs.djangoproject.com/)
-- [PostgreSQL Docs](https://www.postgresql.org/docs/)
-- [Docker Docs](https://docs.docker.com/)
-- [JWT Auth](https://jwt.io/)
-
----
-
-**Desenvolvido com ❤️ pelo time ProjetoFlow**

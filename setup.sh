@@ -29,9 +29,6 @@ fi
 echo "✅ Docker Compose encontrado"
 echo ""
 
-# Navegar para o diretório infra
-cd "$(dirname "$0")/infra"
-
 echo "📦 Construindo containers Docker..."
 docker-compose build
 
