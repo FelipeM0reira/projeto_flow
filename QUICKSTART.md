@@ -5,6 +5,7 @@ Comece com ProjetoFlow em 5 minutos!
 ## 🚀 Opção 1: Docker (Recomendado)
 
 ### Pré-requisitos
+
 - Docker instalado
 - Docker Compose instalado
 
@@ -30,6 +31,7 @@ docker-compose -f infra/docker-compose.yml up -d
 ```
 
 **Credenciais Demo:**
+
 ```
 Usuário: admin
 Senha: password
