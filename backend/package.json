@@ -1,0 +1,23 @@
+{
+  "name": "projetoflow-backend",
+  "version": "1.0.0",
+  "description": "Backend API for ProjetoFlow task management application",
+  "main": "manage.py",
+  "scripts": {
+    "migrate": "python manage.py migrate",
+    "start": "gunicorn src.wsgi:application",
+    "dev": "python manage.py runserver",
+    "test": "pytest",
+    "test:cov": "pytest --cov=src --cov-report=html",
+    "lint": "flake8 src tests",
+    "format": "black src tests",
+    "type-check": "mypy src"
+  },
+  "keywords": [
+    "django",
+    "api",
+    "task-management"
+  ],
+  "author": "ProjetoFlow Team",
+  "license": "MIT"
+}

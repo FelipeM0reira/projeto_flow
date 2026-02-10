@@ -1,0 +1,37 @@
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env.local
+frontend/.env.*.local
+frontend/*.log
+frontend/.vite/
+
+# Backend
+backend/venv/
+backend/__pycache__/
+backend/*.pyc
+backend/.env
+backend/.env.local
+backend/.vscode/
+backend/db.sqlite3
+backend/media/
+backend/static/
+
+# IDE
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*.swo
+
+# Docker
+.env
+.env.local
+
+# Database
+db-data/
+*.sql.bak
+
+# OS
+.DS_Store
+Thumbs.db
