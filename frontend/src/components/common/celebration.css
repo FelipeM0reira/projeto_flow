@@ -1,0 +1,32 @@
+.celebration-root{
+  position: fixed;
+  left: 0; top: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 9999;
+}
+.confetti{
+  position: absolute;
+  width: 10px;
+  height: 14px;
+  opacity: 0.95;
+  transform-origin: center;
+}
+@keyframes confetti-fall{
+  0%{transform: translateY(-10vh) rotate(0deg); opacity:1}
+  100%{transform: translateY(110vh) rotate(720deg); opacity:0}
+}
+@keyframes confetti-sway{
+  0%{transform: translateX(0)}
+  50%{transform: translateX(20px)}
+  100%{transform: translateX(-10px)}
+}
+/* color variants */
+.confetti-0{ background: #FFD166; left:10%; top:-5vh; animation: confetti-fall 1.6s ease-out forwards, confetti-sway 1.6s ease-in-out infinite; }
+.confetti-1{ background: #06D6A0; left:20%; top:-5vh; animation: confetti-fall 1.6s 0.05s ease-out forwards, confetti-sway 1.6s 0.05s ease-in-out infinite; }
+.confetti-2{ background: #118AB2; left:30%; top:-5vh; animation: confetti-fall 1.6s 0.1s ease-out forwards, confetti-sway 1.6s 0.1s ease-in-out infinite; }
+.confetti-3{ background: #EF476F; left:40%; top:-5vh; animation: confetti-fall 1.6s 0.15s ease-out forwards, confetti-sway 1.6s 0.15s ease-in-out infinite; }
+.confetti-4{ background: #FFD166; left:50%; top:-5vh; animation: confetti-fall 1.6s 0.2s ease-out forwards, confetti-sway 1.6s 0.2s ease-in-out infinite; }
+.confetti-5{ background: #06D6A0; left:60%; top:-5vh; animation: confetti-fall 1.6s 0.25s ease-out forwards, confetti-sway 1.6s 0.25s ease-in-out infinite; }
+.confetti-6{ background: #118AB2; left:70%; top:-5vh; animation: confetti-fall 1.6s 0.3s ease-out forwards, confetti-sway 1.6s 0.3s ease-in-out infinite; }
+.confetti-7{ background: #EF476F; left:80%; top:-5vh; animation: confetti-fall 1.6s 0.35s ease-out forwards, confetti-sway 1.6s 0.35s ease-in-out infinite; }

@@ -6,15 +6,19 @@ import {
   HiOutlineLogout,
   HiOutlineSun,
   HiOutlineMoon,
+  HiOutlineVolumeUp,
+  HiOutlineVolumeOff,
   HiOutlineMenu,
   HiOutlineX
 } from 'react-icons/hi'
 import { useAuth } from '../../contexts/AuthContext'
 import { useTheme } from '../../contexts/ThemeContext'
+import { useUIFeedback } from '../../contexts/UIFeedbackContext'
 
 export default function AppLayout() {
   const { user, logout } = useAuth()
   const { theme, toggleTheme } = useTheme()
+  const { soundEnabled, toggleSound } = useUIFeedback()
   const navigate = useNavigate()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
@@ -109,6 +113,15 @@ export default function AppLayout() {
               aria-label="Alternar tema"
             >
               {theme === 'light' ? <HiOutlineMoon /> : <HiOutlineSun />}
+            </button>
+
+            <button
+              className="btn-icon"
+              onClick={toggleSound}
+              title={soundEnabled ? 'Desativar som' : 'Ativar som'}
+              aria-label="Alternar som"
+            >
+              {soundEnabled ? <HiOutlineVolumeUp /> : <HiOutlineVolumeOff />}
             </button>
 
             <button className="btn btn-ghost btn-sm" onClick={handleLogout}>

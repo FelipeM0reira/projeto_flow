@@ -16,6 +16,8 @@ import Modal from '../common/Modal'
 import toast from 'react-hot-toast'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import { useUIFeedback } from '../../contexts/UIFeedbackContext'
+import Celebration from '../common/Celebration'
 
 export default function ProjectDetailPage() {
   const { id } = useParams()
@@ -46,6 +48,7 @@ export default function ProjectDetailPage() {
   // Edit project modal
   const [showEditModal, setShowEditModal] = useState(false)
   const [projectForm, setProjectForm] = useState({ name: '', description: '' })
+  const { celebrate, showConfetti } = useUIFeedback()
 
   const loadProject = useCallback(async () => {
     try {
@@ -128,9 +131,11 @@ export default function ProjectDetailPage() {
 
   const handleToggleComplete = async task => {
     try {
-      await taskAPI.toggleComplete(id, task.id)
+      const res = await taskAPI.toggleComplete(id, task.id)
+      const completedNow = res?.data?.completed ?? !task.completed
       loadTasks()
       loadProject()
+      if (completedNow) celebrate()
     } catch (err) {
       toast.error('Erro ao atualizar tarefa')
     }
@@ -233,6 +238,7 @@ export default function ProjectDetailPage() {
 
   return (
     <div className="animate-fade-in">
+      <Celebration show={showConfetti} />
       {/* Header */}
       <div className="project-detail-header">
         <div>

@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { ThemeProvider } from './contexts/ThemeContext'
+import { UIFeedbackProvider } from './contexts/UIFeedbackContext'
 import PrivateRoute from './components/common/PrivateRoute'
 import AppLayout from './components/layout/AppLayout'
 import LoginPage from './components/auth/LoginPage'
@@ -80,20 +81,22 @@ export default function App() {
     <BrowserRouter>
       <AuthProvider>
         <ThemeProvider>
-          <AppRoutes />
-          <Toaster
-            position="top-right"
-            toastOptions={{
-              duration: 3000,
-              style: {
-                borderRadius: '10px',
-                background: 'var(--color-surface)',
-                color: 'var(--color-text-primary)',
-                border: '1px solid var(--color-border)',
-                boxShadow: 'var(--shadow-lg)'
-              }
-            }}
-          />
+          <UIFeedbackProvider>
+            <AppRoutes />
+            <Toaster
+              position="top-right"
+              toastOptions={{
+                duration: 3000,
+                style: {
+                  borderRadius: '10px',
+                  background: 'var(--color-surface)',
+                  color: 'var(--color-text-primary)',
+                  border: '1px solid var(--color-border)',
+                  boxShadow: 'var(--shadow-lg)'
+                }
+              }}
+            />
+          </UIFeedbackProvider>
         </ThemeProvider>
       </AuthProvider>
     </BrowserRouter>
