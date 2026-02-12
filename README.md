@@ -18,6 +18,8 @@
 - Perfil de usuário com troca de tema (claro/escuro)
 - Sessão persistente com refresh automático de tokens
 
+  https://github.com/user-attachments/assets/c29c0f5a-71aa-47f2-8c71-79c946cfa744
+
 ### Projetos
 
 - CRUD completo de projetos
