@@ -27,6 +27,8 @@
 - Colaboração — adicionar e remover membros
 - Progresso calculado automaticamente
 
+https://github.com/user-attachments/assets/f0a6ab12-40a3-49b4-ba09-12a5841fc93d
+
 ### Tarefas
 
 - CRUD completo de tarefas por projeto
