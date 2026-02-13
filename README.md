@@ -38,12 +38,16 @@ https://github.com/user-attachments/assets/f0a6ab12-40a3-49b4-ba09-12a5841fc93d
 - Data de vencimento
 - Toggle de conclusão rápido
 
+https://github.com/user-attachments/assets/5ac760e8-9649-4f4d-bb35-6c5dd69e049d
+
 ### Dashboard
 
 - Estatísticas agregadas (projetos, tarefas, membros)
 - Distribuição de tarefas por status
 - Projetos recentes
 - Barra de progresso global
+
+https://github.com/user-attachments/assets/ee293f97-2765-41b7-ace8-77bbc0483ca7
 
 ### Interface
 
@@ -53,7 +57,7 @@ https://github.com/user-attachments/assets/f0a6ab12-40a3-49b4-ba09-12a5841fc93d
 - Formulários com validação em tempo real
 - Notificações toast
 
----
+https://github.com/user-attachments/assets/b1fc2f2e-daff-4e22-8c31-5348b2329b8d
 
 ## 🏗️ Arquitetura
 
