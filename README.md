@@ -59,6 +59,37 @@ https://github.com/user-attachments/assets/ee293f97-2765-41b7-ace8-77bbc0483ca7
 
 https://github.com/user-attachments/assets/b1fc2f2e-daff-4e22-8c31-5348b2329b8d
 
+---
+
+## 🛠️ Tecnologias
+
+### Backend
+
+- **Python 3.12** + **Django 4.2** + **Django REST Framework 3.14**
+- **SimpleJWT** — Autenticação JWT (access 2h, refresh 7d)
+- **django-filter** — Filtros avançados nas listagens
+- **drf-yasg** — Documentação Swagger/ReDoc automática
+- **psycopg2** — Driver PostgreSQL
+- **pytest** + **factory-boy** — Testes com fixtures
+
+### Frontend
+
+- **React 18** + **React Router 6**
+- **Axios** — HTTP client com interceptors JWT
+- **react-hot-toast** — Notificações
+- **react-icons** — Biblioteca de ícones
+- **date-fns** — Formatação de datas
+- **CSS Design System** — Variáveis, temas, componentes reutilizáveis
+
+### Infraestrutura
+
+- **Docker Compose** — 3 containers (frontend, backend, db)
+- **PostgreSQL 15** — Banco de dados
+- **Node 18 Alpine** — Build do frontend
+
+---
+
+
 ## 🏗️ Arquitetura
 
 ```
@@ -227,34 +258,10 @@ npm test -- --watchAll=false
 
 ---
 
-## 🛠️ Tecnologias
+##👨‍💻 Autor
 
-### Backend
+ [<img src="https://avatars.githubusercontent.com/u/104744113?v=4" width=115><br><sub>Felipe Moreira</sub>](https://github.com/FelipeM0reira) 
 
-- **Python 3.12** + **Django 4.2** + **Django REST Framework 3.14**
-- **SimpleJWT** — Autenticação JWT (access 2h, refresh 7d)
-- **django-filter** — Filtros avançados nas listagens
-- **drf-yasg** — Documentação Swagger/ReDoc automática
-- **psycopg2** — Driver PostgreSQL
-- **pytest** + **factory-boy** — Testes com fixtures
+## Licenca
 
-### Frontend
-
-- **React 18** + **React Router 6**
-- **Axios** — HTTP client com interceptors JWT
-- **react-hot-toast** — Notificações
-- **react-icons** — Biblioteca de ícones
-- **date-fns** — Formatação de datas
-- **CSS Design System** — Variáveis, temas, componentes reutilizáveis
-
-### Infraestrutura
-
-- **Docker Compose** — 3 containers (frontend, backend, db)
-- **PostgreSQL 15** — Banco de dados
-- **Node 18 Alpine** — Build do frontend
-
----
-
-## 📄 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+MIT.
